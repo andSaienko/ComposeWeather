@@ -1,7 +1,7 @@
 package com.weather.app.composeweather.di
 
+import com.weather.app.composeweather.data.api.BASE_URL
 import com.weather.app.composeweather.data.api.WeatherApi
-import com.weather.app.composeweather.data.api.WeatherApiServiceProvider
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,7 +20,7 @@ val networkModule = module {
     }
 
     factory<WeatherApi> {
-        WeatherApiServiceProvider().provideWeatherApiService(retrofit = get())
+        provideWeatherApiService(retrofit = get())
     }
 }
 
@@ -39,8 +39,12 @@ fun provideOkHttpClient(): OkHttpClient {
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://api.weatherapi.com")
+        .baseUrl(BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+}
+
+fun provideWeatherApiService(retrofit: Retrofit): WeatherApi {
+    return retrofit.create(WeatherApi::class.java)
 }

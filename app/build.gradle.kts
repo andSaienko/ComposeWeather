@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("app.cash.paparazzi")
 }
 
 android {
@@ -37,7 +38,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.5"
     }
     packaging {
         resources {
@@ -69,6 +70,7 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.0")
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
+    testImplementation("io.coil-kt:coil-test:2.5.0")
     //Pager
     implementation("com.google.accompanist:accompanist-pager:0.25.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.19.0")
