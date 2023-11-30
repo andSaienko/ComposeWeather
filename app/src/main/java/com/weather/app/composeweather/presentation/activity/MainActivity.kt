@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.lifecycle.lifecycleScope
-import com.weather.app.composeweather.domain.enums.Cities
 import com.weather.app.composeweather.presentation.intent.WeatherIntent
 import com.weather.app.composeweather.presentation.state.ViewModelState
 import com.weather.app.composeweather.presentation.ui.HourDayTabLayout
@@ -36,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
     private fun handleIntents() {
         lifecycleScope.launch {
-            vm.sendIntent(WeatherIntent.LoadWeather(city = Cities.DEFAULT_CITY.value))
+            vm.sendIntent(WeatherIntent.LoadWeather(city = com.weather.app.composeweather.domain.DEFAULT_CITY))
         }
     }
 
