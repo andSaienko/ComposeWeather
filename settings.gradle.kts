@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "ComposeWeather"
 include(":app")
+include(":core")
+include(":mvi_base")
