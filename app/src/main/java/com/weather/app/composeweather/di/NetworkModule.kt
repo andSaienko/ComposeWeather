@@ -24,7 +24,7 @@ val networkModule = module {
     }
 }
 
-fun provideOkHttpClient(): OkHttpClient {
+private fun provideOkHttpClient(): OkHttpClient {
     val createAuthInterceptor = Interceptor { chain ->
         chain.proceed(chain.request().newBuilder().build())
     }
@@ -37,7 +37,7 @@ fun provideOkHttpClient(): OkHttpClient {
         .build()
 }
 
-fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+private fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(okHttpClient)
@@ -45,6 +45,6 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         .build()
 }
 
-fun provideWeatherApiService(retrofit: Retrofit): WeatherApi {
+private fun provideWeatherApiService(retrofit: Retrofit): WeatherApi {
     return retrofit.create(WeatherApi::class.java)
 }
