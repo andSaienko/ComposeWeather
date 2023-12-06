@@ -47,7 +47,7 @@ fun WeatherDayListItem(item: ForecastDayDTO) {
                 )
             }
             Text(
-                modifier = Modifier.weight(1f), text = item.day?.avgtempC.toString(), color = Color(0x80000000), fontSize = 24.sp
+                modifier = Modifier.weight(1f), text = "${item.day?.avgtempC.toString()}ºС", color = Color(0x80000000), fontSize = 24.sp
             )
             AsyncImage(
                 modifier = Modifier.size(24.dp), model = "https:${item.day?.condition?.icon}", contentDescription = "weather icon"

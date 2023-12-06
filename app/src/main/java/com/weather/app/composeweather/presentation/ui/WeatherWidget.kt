@@ -31,9 +31,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,12 +59,14 @@ import com.weather.app.composeweather.presentation.viewmodel.WeatherViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
+@OptIn(ExperimentalComposeUiApi::class)
 @SuppressLint("CoroutineCreationDuringComposition")
-
 
 @Composable
 fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherResponseDTO) {
     var isDialogVisible by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
@@ -77,13 +81,13 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                     .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = data.currentWeather?.lastUpdated.toString(),
+                    text = data.current?.lastUpdated.toString(),
                     fontSize = 16.sp,
                     color = Color(0x80000000),
 
                     )
                 AsyncImage(
-                    modifier = Modifier.size(24.dp), model = "https://${data.currentWeather?.condition?.icon}", contentDescription = "weather icon"
+                    modifier = Modifier.size(24.dp), model = "https://${data.current?.condition?.icon}", contentDescription = "weather icon"
                 )
             }
             Column(
@@ -93,10 +97,10 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                     text = data.location?.name ?: "unknown", fontSize = 26.sp, color = Color(0xC0000000)
                 )
                 Text(
-                    text = "${data.currentWeather?.tempC.toString()}ºC", fontSize = 48.sp, color = Color(0xC0000000)
+                    text = "${data.current?.tempC.toString()}ºC", fontSize = 48.sp, color = Color(0xC0000000)
                 )
                 Text(
-                    text = data.currentWeather?.condition?.text.toString(), fontSize = 14.sp, color = Color(0x80000000)
+                    text = data.current?.condition?.text.toString(), fontSize = 14.sp, color = Color(0x80000000)
                 )
             }
             Row(
@@ -113,7 +117,7 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                     )
                 }
                 Text(
-                    text = "Feels like ${data.currentWeather?.feelslikeC}ºС ", fontSize = 14.sp, color = Color(0x80000000)
+                    text = "Feels like ${data.current?.feelslikeC}ºС ", fontSize = 14.sp, color = Color(0x80000000)
                 )
                 IconButton(onClick = {
                     viewModel.viewModelScope.launch {
@@ -130,7 +134,9 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                         onDismiss = { isDialogVisible = false },
                         onConfirm = { city ->
                             viewModel.getWeather(city)
-                            viewModel.saveActualCity(city)
+//                            viewModel.saveActualCity(city)
+                            keyboardController?.hide()
+                            isDialogVisible = false
                         }
                     )
                 }

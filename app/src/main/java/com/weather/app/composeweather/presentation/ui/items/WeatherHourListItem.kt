@@ -47,7 +47,7 @@ fun WeatherHourListItem(item: HourDTO) {
                 )
             }
             Text(
-                modifier = Modifier.weight(1f), text = item.tempC.toString(), color = Color(0x80000000), fontSize = 24.sp
+                modifier = Modifier.weight(1f), text = "${item.tempC.toString()}ºС", color = Color(0x80000000), fontSize = 24.sp
             )
             AsyncImage(
                 modifier = Modifier.size(24.dp), model = "https:${item.condition?.icon}", contentDescription = "weather icon"

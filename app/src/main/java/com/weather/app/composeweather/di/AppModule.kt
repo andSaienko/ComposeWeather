@@ -8,7 +8,9 @@ val appModule = module {
 
     viewModel<WeatherViewModel> {
         WeatherViewModel(
-            getWeatherUseCase = get(), saveCityUseCase = get(), loadCityUseCase = get()
+            getWeatherUseCase = get(),
+            saveCityUseCase = get(),
+            loadCityUseCase = get()
         )
     }
 }
