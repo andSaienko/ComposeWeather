@@ -1,55 +1,30 @@
 package com.weather.app.composeweather.presentation.activity
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.lifecycle.lifecycleScope
-import com.weather.app.composeweather.presentation.intent.WeatherIntent
-import com.weather.app.composeweather.presentation.state.ViewModelState
+import com.weather.app.composeweather.presentation.event.ViewAction
+import com.weather.app.composeweather.presentation.intent.ViewIntent
+import com.weather.app.composeweather.presentation.state.ViewState
 import com.weather.app.composeweather.presentation.ui.HourDayTabLayout
 import com.weather.app.composeweather.presentation.ui.LoadingWidget
 import com.weather.app.composeweather.presentation.ui.LottieAnim
 import com.weather.app.composeweather.presentation.ui.WeatherWidget
 import com.weather.app.composeweather.presentation.viewmodel.WeatherViewModel
-import kotlinx.coroutines.launch
+import com.weather.mvi_base.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : ComponentActivity() {
-
-    private val vm by viewModel<WeatherViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setObservers()
-        handleIntents()
-    }
-
-    private fun setObservers() {
-        lifecycleScope.launch {
-            vm.state.collect { state ->
-                renderState(state)
-            }
-        }
-    }
-
-    private fun handleIntents() {
-        lifecycleScope.launch {
-            vm.sendIntent(WeatherIntent.LoadWeather(city = com.weather.app.composeweather.domain.DEFAULT_CITY))
-        }
-    }
-
-    private fun renderState(state: ViewModelState) {
+class MainActivity : BaseActivity<ViewIntent, ViewState, ViewAction, WeatherViewModel>() {
+    override val vm by viewModel<WeatherViewModel>()
+    override fun renderState(state: ViewState) {
         when (state) {
-            is ViewModelState.IdleState -> Unit
 
-            is ViewModelState.LoadingState -> {
+            is ViewState.Loading -> {
                 setContent {
                     LoadingWidget()
                 }
             }
 
-            is ViewModelState.WeatherInfoState -> {
+            is ViewState.DataCollected -> {
                 setContent {
                     LottieAnim(data = state.data)
                     Column {
@@ -59,8 +34,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            is ViewModelState.ErrorState -> {}
-
+            is ViewState.Error -> Unit
         }
     }
 }

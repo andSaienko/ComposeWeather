@@ -3,7 +3,6 @@ package com.weather.app.composeweather.presentation.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -19,16 +18,13 @@ fun LoadingWidget() {
     LottieAnim()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         CircularProgressIndicator(
             modifier = Modifier
-                .size(120.dp)
-                .padding(8.dp),
+                .size(120.dp),
             color = Color(0x80F1FEFF)
         )
     }

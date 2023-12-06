@@ -15,10 +15,12 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-internal sealed class ExampleUnitTest {
+class ExampleUnitTest {
 
     @get:Rule
-    abstract val paparazzi: Paparazzi
+    val paparazzi = Paparazzi(
+        deviceConfig = DeviceConfig.PIXEL_5
+    )
 
     @OptIn(ExperimentalCoilApi::class)
     @Before
@@ -39,13 +41,5 @@ internal sealed class ExampleUnitTest {
         paparazzi.snapshot {
             WeatherHourListItem(HourDTO())
         }
-    }
-
-    class EN : ExampleUnitTest() {
-        override val paparazzi = Paparazzi(
-            deviceConfig = DeviceConfig.PIXEL_5.copy(
-                navigation = Navigation.DPAD
-            )
-        )
     }
 }

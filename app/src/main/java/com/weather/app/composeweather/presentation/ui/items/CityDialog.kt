@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.ui
+package com.weather.app.composeweather.presentation.ui.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
