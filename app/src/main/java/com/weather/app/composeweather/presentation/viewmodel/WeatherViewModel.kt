@@ -3,16 +3,20 @@ package com.weather.app.composeweather.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weather.app.composeweather.data.model.request.WeatherRequestDTO
+import com.weather.app.composeweather.domain.model.WeatherResponseDTO
 import com.weather.app.composeweather.domain.usecase.GetWeatherUseCase
 import com.weather.app.composeweather.domain.usecase.LoadCityUseCase
 import com.weather.app.composeweather.domain.usecase.SaveCityUseCase
-import com.weather.app.composeweather.presentation.intent.WeatherIntent
-import com.weather.app.composeweather.presentation.state.ViewModelState
-import kotlinx.coroutines.channels.Channel
+import com.weather.app.composeweather.presentation.event.ViewAction
+import com.weather.app.composeweather.presentation.intent.ViewIntent
+import com.weather.app.composeweather.presentation.state.ViewState
+import com.weather.core.network.error
+import com.weather.core.network.execute
+import com.weather.core.network.networkExecutor
+import com.weather.core.network.success
+import com.weather.mvi_base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 
@@ -20,48 +24,53 @@ class WeatherViewModel(
     private val saveCityUseCase: SaveCityUseCase,
     private val loadCityUseCase: LoadCityUseCase,
     private val getWeatherUseCase: GetWeatherUseCase,
-) : ViewModel() {
+) : BaseViewModel<ViewIntent, ViewAction, ViewState>, ViewModel() {
 
-    private val _state = MutableStateFlow<ViewModelState>(ViewModelState.IdleState)
-    var state = _state.asStateFlow()
-
-    // !! CHECH IT
-    private val _intent = Channel<WeatherIntent>(Channel.UNLIMITED)
-
-    val intent = _intent.receiveAsFlow()
+    override val viewState = MutableStateFlow<ViewState>(ViewState.Loading)
 
     init {
-//        getWeather(city = loadActualCity())
-        handleIntent()
+        val action = handleIntent(ViewIntent.Initial("Kyiv"))
+        handleAction(action)
     }
 
-    // add onrefresh clicked
+    override fun handleIntent(intent: ViewIntent): ViewAction {
+        return when (intent) {
+            is ViewIntent.Initial -> ViewAction.SearchWeather
+            is ViewIntent.Search -> ViewAction.SearchWeather
+            is ViewIntent.Refresh -> ViewAction.RefreshCurrent
+        }
+    }
 
-    private fun handleIntent() {
-        viewModelScope.launch {
-            intent.collect { weatherIntent ->
-                when (weatherIntent) {
-                    is WeatherIntent.LoadWeather -> getWeather(weatherIntent.city)
-                    is WeatherIntent.SaveCity -> saveActualCity(weatherIntent.city)
-                    is WeatherIntent.RefreshInfo -> {}
-                }
+    override fun handleAction(action: ViewAction) {
+        when (action) {
+            is ViewAction.SearchWeather -> {
+                getWeather("Kyiv")
+            }
+
+            is ViewAction.RefreshCurrent -> {
+
             }
         }
     }
 
     fun getWeather(city: String) {
         viewModelScope.launch {
-            _state.value = ViewModelState.LoadingState
 
-            // Only for visual
+//          Only for visual
             delay(300L)
 
-            val response = getWeatherUseCase(WeatherRequestDTO(city))
-            _state.value = ViewModelState.WeatherInfoState(data = response)
+            networkExecutor<WeatherResponseDTO> {
+                execute { getWeatherUseCase(WeatherRequestDTO(city)) }
+                success {
+                    viewState.value = ViewState.DataCollected(data = it)
+                    saveActualCity(city)
+                }
+                error { viewState.value = ViewState.Error }
+            }
         }
     }
 
-    fun saveActualCity(city: String) {
+    private fun saveActualCity(city: String) {
         viewModelScope.launch {
             saveCityUseCase(city)
         }
@@ -69,11 +78,5 @@ class WeatherViewModel(
 
     fun loadActualCity(): String {
         return loadCityUseCase()
-    }
-
-    fun sendIntent(intent: WeatherIntent) {
-        viewModelScope.launch {
-            _intent.send(intent)
-        }
     }
 }
