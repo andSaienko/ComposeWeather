@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("app.cash.paparazzi")
 }
 
 android {
@@ -52,42 +51,42 @@ dependencies {
     implementation(project(":mvi_base"))
     implementation(project(":core"))
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.8.1")
+    implementation(libs.core.ktx)
+    implementation(libs.lifecycle.runtime)
+    implementation(libs.activity.compose)
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation(project(":core"))
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    //Volley
-    implementation("com.android.volley:volley:1.2.1")
     //Lottie
-    implementation("com.airbnb.android:lottie-compose:6.0.0")
+    implementation(libs.lottie.compose)
     //Coil
-    implementation("io.coil-kt:coil-compose:2.5.0")
-    testImplementation("io.coil-kt:coil-test:2.5.0")
+    implementation(libs.coil.compose)
+    testImplementation(libs.coil.test)
     //Pager
-    implementation("com.google.accompanist:accompanist-pager:0.25.1")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.19.0")
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
     //Koin
-    implementation("io.insert-koin:koin-androidx-compose:3.4.0")
+    implementation(libs.koin.androidx.compose)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
     // OkHttp
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation(libs.logging.interceptor)
     // GSON
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.converter.gson)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    implementation (libs.kotlin.stdlib.jdk8)
 }

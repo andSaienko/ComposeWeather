@@ -1,0 +1,38 @@
+[versions]
+accompanist-pager = "0.25.1"
+accompanist-pager-indicators = "0.19.0"
+activity-compose = "1.8.2"
+androidx-junit = "1.1.5"
+coil-compose = "2.5.0"
+converter-gson = "2.9.0"
+core-ktx = "1.12.0"
+junit = "4.13.2"
+koin-androidx-compose = "3.4.0"
+kotlin-stdlib-jdk8 = "1.9.10"
+kotlinx-coroutines-core = "1.7.3"
+lifecycle-runtine = "2.7.0"
+logging-interceptor = "4.12.0"
+lottie-compose = "6.0.0"
+retrofit = "2.9.0"
+
+[libraries]
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist-pager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist-pager-indicators" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil-compose" }
+coil-test = { module = "io.coil-kt:coil-test", version.ref = "coil-compose" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converter-gson" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+junit = { module = "junit:junit", version.ref = "junit" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin-androidx-compose" }
+kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin-stdlib-jdk8" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-core" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtine" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "logging-interceptor" }
+
+
+[plugins]
