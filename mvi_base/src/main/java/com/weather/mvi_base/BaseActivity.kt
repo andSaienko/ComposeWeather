@@ -8,8 +8,7 @@ import kotlinx.coroutines.launch
 abstract class BaseActivity<
         I : BaseIntent,
         S : BaseState,
-        A : BaseAction,
-        VM : BaseViewModel<I, A, S>,
+        VM : BaseViewModel<I, S>,
         > : ComponentActivity() {
 
     protected abstract val vm: VM
@@ -20,7 +19,7 @@ abstract class BaseActivity<
 
     private fun collectState() {
         lifecycleScope.launch {
-            vm.viewState.collect { state ->
+            vm.state.collect { state ->
                 renderState(state)
             }
         }

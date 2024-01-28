@@ -7,8 +7,7 @@ class SharedPrefsRepositoryImpl(private val sharedPrefs: SharedPreferences) : Sh
     override suspend fun saveCity(city: String) {
         sharedPrefs.edit().putString(com.weather.app.composeweather.domain.CITY, city).apply()
     }
-
     override fun loadCity(): String? {
-        return sharedPrefs.getString(com.weather.app.composeweather.domain.CITY, "")
+        return sharedPrefs.getString(com.weather.app.composeweather.domain.CITY, null)
     }
 }

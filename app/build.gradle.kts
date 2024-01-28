@@ -89,4 +89,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation (libs.kotlin.stdlib.jdk8)
+
+    implementation(libs.navigation.compose)
 }

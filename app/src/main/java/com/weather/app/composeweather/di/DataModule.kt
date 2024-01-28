@@ -10,15 +10,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
-
     single<SharedPreferences> {
         AppSharedPrefs(context = androidContext()).provideSharedPrefs()
     }
-
     single<SharedPrefsRepository> {
         SharedPrefsRepositoryImpl(sharedPrefs = get())
     }
-
     single<WeatherRepository> {
         WeatherRepositoryImpl(weatherApiService = get())
     }

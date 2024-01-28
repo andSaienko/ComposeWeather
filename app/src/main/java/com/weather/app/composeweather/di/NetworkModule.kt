@@ -10,15 +10,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-
     factory<OkHttpClient> {
         provideOkHttpClient()
     }
-
     factory<Retrofit> {
         provideRetrofit(okHttpClient = get())
     }
-
     factory<WeatherApi> {
         provideWeatherApiService(retrofit = get())
     }
@@ -28,7 +25,6 @@ private fun provideOkHttpClient(): OkHttpClient {
     val createAuthInterceptor = Interceptor { chain ->
         chain.proceed(chain.request().newBuilder().build())
     }
-
     return OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY

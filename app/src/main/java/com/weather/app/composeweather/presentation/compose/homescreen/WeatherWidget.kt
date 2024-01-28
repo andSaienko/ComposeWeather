@@ -1,6 +1,5 @@
-package com.weather.app.composeweather.presentation.ui
+package com.weather.app.composeweather.presentation.compose.homescreen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,16 +30,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -53,19 +50,18 @@ import com.google.accompanist.pager.rememberPagerState
 import com.weather.app.composeweather.R
 import com.weather.app.composeweather.data.model.response.HourDTO
 import com.weather.app.composeweather.domain.model.WeatherResponseDTO
-import com.weather.app.composeweather.presentation.ui.items.WeatherDayListItem
-import com.weather.app.composeweather.presentation.ui.items.WeatherHourListItem
-import com.weather.app.composeweather.presentation.viewmodel.WeatherViewModel
+import com.weather.app.composeweather.presentation.compose.Screen
+import com.weather.app.composeweather.presentation.intent.ViewIntent
+import com.weather.app.composeweather.presentation.state.ViewState
+import com.weather.app.composeweather.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalTime
-
-@OptIn(ExperimentalComposeUiApi::class)
-@SuppressLint("CoroutineCreationDuringComposition")
+import kotlin.math.floor
 
 @Composable
-fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherResponseDTO) {
+fun WeatherWidget(viewModel: HomeScreenViewModel, state: ViewState) {
+    val data = (state as ViewState.DataCollected).data
     var isDialogVisible by remember { mutableStateOf(false) }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier.padding(8.dp)
@@ -84,8 +80,7 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                     text = data.current?.lastUpdated.toString(),
                     fontSize = 16.sp,
                     color = Color(0x80000000),
-
-                    )
+                )
                 AsyncImage(
                     modifier = Modifier.size(24.dp), model = "https://${data.current?.condition?.icon}", contentDescription = "weather icon"
                 )
@@ -94,10 +89,12 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                 modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = data.location?.name ?: "unknown", fontSize = 26.sp, color = Color(0xC0000000)
+                    text = data.location?.name ?: "unknown",
+                    fontSize = 26.sp,
+                    color = Color(0xC0000000),
                 )
                 Text(
-                    text = "${data.current?.tempC.toString()}ºC", fontSize = 48.sp, color = Color(0xC0000000)
+                    text = "${data.current?.tempC?.let { floor(it).toInt() }}ºC", fontSize = 48.sp, color = Color(0xC0000000)
                 )
                 Text(
                     text = data.current?.condition?.text.toString(), fontSize = 14.sp, color = Color(0x80000000)
@@ -117,11 +114,11 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                     )
                 }
                 Text(
-                    text = "Feels like ${data.current?.feelslikeC}ºС ", fontSize = 14.sp, color = Color(0x80000000)
+                    text = "Feels like ${data.current?.feelslikeC?.let { floor(it).toInt() }}ºС ", fontSize = 14.sp, color = Color(0x80000000)
                 )
                 IconButton(onClick = {
                     viewModel.viewModelScope.launch {
-                        viewModel.getWeather(viewModel.loadActualCity())
+                        viewModel.processIntent(ViewIntent.RefreshIntent)
                     }
                 }) {
                     Icon(
@@ -130,15 +127,10 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
                 }
 
                 if (isDialogVisible) {
-                    InputCityDialog(
-                        onDismiss = { isDialogVisible = false },
-                        onConfirm = { city ->
-                            viewModel.getWeather(city)
-//                            viewModel.saveActualCity(city)
-                            keyboardController?.hide()
-                            isDialogVisible = false
-                        }
-                    )
+                    InputCityDialog(onDismiss = { isDialogVisible = false }, onConfirm = { city ->
+                        viewModel.processIntent(ViewIntent.SearchIntent(city))
+                        isDialogVisible = false
+                    })
                 }
             }
         }
@@ -147,7 +139,7 @@ fun WeatherWidget(viewModel: WeatherViewModel = viewModel(), data: WeatherRespon
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HourDayTabLayout(data: WeatherResponseDTO) {
+fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
     val tabList = listOf("Hours", "Days")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
@@ -155,19 +147,13 @@ fun HourDayTabLayout(data: WeatherResponseDTO) {
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        TabRow(modifier = Modifier.clip(RoundedCornerShape(16.dp)),
-            selectedTabIndex = tabIndex,
-            indicator = { position ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier
-                        .width(50.dp)
-                        .tabIndicatorOffset(position[tabIndex]),
-                    color = Color(0x80000000),
-                    height = 2.dp
-                )
-            },
-            containerColor = Color(0x80F1FEFF),
-            divider = { Divider(color = Color.Transparent) }) {
+        TabRow(modifier = Modifier.clip(RoundedCornerShape(16.dp)), selectedTabIndex = tabIndex, indicator = { position ->
+            TabRowDefaults.Indicator(
+                modifier = Modifier
+                    .width(50.dp)
+                    .tabIndicatorOffset(position[tabIndex]), color = Color(0x80000000), height = 2.dp
+            )
+        }, containerColor = Color(0x80F1FEFF), divider = { Divider(color = Color.Transparent) }) {
             tabList.forEachIndexed { index, title ->
                 Tab(selected = false, onClick = {
                     coroutineScope.launch {
@@ -189,27 +175,36 @@ fun HourDayTabLayout(data: WeatherResponseDTO) {
                 when (index) {
                     0 -> {
                         val hoursList = data.forecast?.forecastday?.get(index)?.hour
-
                         val currentHour = LocalTime.now().hour
-
-                        val futureHoursList =
-                            hoursList?.size?.let {
-                                hoursList.subList(
-                                    currentHour + 1,
-                                    it
-                                )
-                            }
-
+                        val futureHoursList = hoursList?.size?.let {
+                            hoursList.subList(
+                                currentHour + 1, it
+                            )
+                        }
                         val independentList: ArrayList<HourDTO> = ArrayList(futureHoursList.orEmpty())
 
                         itemsIndexed(independentList) { _, item ->
-                            WeatherHourListItem(item = item)
+                            WeatherHourListItem(item = item, onHourItemClick = {
+                                navController.navigate(
+                                    Screen.HourDetails.createRoute(
+                                        //todo check this
+                                        "city"
+                                    )
+                                )
+                            })
                         }
                     }
 
                     1 -> {
                         itemsIndexed(data.forecast?.forecastday ?: emptyList()) { _, item ->
-                            WeatherDayListItem(item = item)
+                            WeatherDayListItem(item = item, onDayItemClick = {
+                                navController.navigate(
+                                    Screen.DayDetails.createRoute(
+                                        //todo check this
+                                        "city"
+                                    )
+                                )
+                            })
                         }
                     }
                 }
@@ -219,13 +214,7 @@ fun HourDayTabLayout(data: WeatherResponseDTO) {
 }
 
 @Composable
-fun LottieAnim(data: WeatherResponseDTO? = null) {
-
-    //Todo FOR FUTURE
-//    val actualWeatherAnim: Int = when (data?.current?.condition?.text) {
-//        "Blizzard" -> R.raw.snow_anim
-//        else -> R.raw.sky_anim
-//    }
+fun LottieAnim() {
 
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sky_anim))
     val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)

@@ -1,13 +1,13 @@
 package com.weather.app.composeweather.di
 
-import com.weather.app.composeweather.presentation.viewmodel.WeatherViewModel
+import com.weather.app.composeweather.presentation.viewmodel.HomeScreenViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
 
-    viewModel<WeatherViewModel> {
-        WeatherViewModel(
+    viewModel<HomeScreenViewModel> {
+        HomeScreenViewModel(
             getWeatherUseCase = get(),
             saveCityUseCase = get(),
             loadCityUseCase = get()

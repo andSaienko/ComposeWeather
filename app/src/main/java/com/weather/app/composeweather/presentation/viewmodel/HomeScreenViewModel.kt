@@ -2,12 +2,10 @@ package com.weather.app.composeweather.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weather.app.composeweather.data.model.request.WeatherRequestDTO
 import com.weather.app.composeweather.domain.model.WeatherResponseDTO
 import com.weather.app.composeweather.domain.usecase.GetWeatherUseCase
 import com.weather.app.composeweather.domain.usecase.LoadCityUseCase
 import com.weather.app.composeweather.domain.usecase.SaveCityUseCase
-import com.weather.app.composeweather.presentation.event.ViewAction
 import com.weather.app.composeweather.presentation.intent.ViewIntent
 import com.weather.app.composeweather.presentation.state.ViewState
 import com.weather.core.network.error
@@ -17,55 +15,47 @@ import com.weather.core.network.success
 import com.weather.mvi_base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
-class WeatherViewModel(
+class HomeScreenViewModel(
     private val saveCityUseCase: SaveCityUseCase,
     private val loadCityUseCase: LoadCityUseCase,
     private val getWeatherUseCase: GetWeatherUseCase,
-) : BaseViewModel<ViewIntent, ViewAction, ViewState>, ViewModel() {
+) : BaseViewModel<ViewIntent, ViewState>, ViewModel() {
 
-    override val viewState = MutableStateFlow<ViewState>(ViewState.Loading)
+    private val _state = MutableStateFlow<ViewState>(ViewState.Loading)
+    override val state: StateFlow<ViewState> = _state
 
     init {
-        val action = handleIntent(ViewIntent.Initial("Kyiv"))
-        handleAction(action)
+        processIntent(ViewIntent.Initial(loadCityUseCase()))
     }
 
-    override fun handleIntent(intent: ViewIntent): ViewAction {
-        return when (intent) {
-            is ViewIntent.Initial -> ViewAction.SearchWeather
-            is ViewIntent.Search -> ViewAction.SearchWeather
-            is ViewIntent.Refresh -> ViewAction.RefreshCurrent
-        }
-    }
-
-    override fun handleAction(action: ViewAction) {
-        when (action) {
-            is ViewAction.SearchWeather -> {
-                getWeather("Kyiv")
-            }
-
-            is ViewAction.RefreshCurrent -> {
-
-            }
+    override fun processIntent(intent: ViewIntent) {
+        when (intent) {
+            is ViewIntent.Initial -> getWeather(loadCityUseCase())
+            is ViewIntent.SearchIntent -> getWeather(intent.cityName)
+            is ViewIntent.RefreshIntent -> getWeather(loadCityUseCase())
         }
     }
 
     fun getWeather(city: String) {
         viewModelScope.launch {
-
-//          Only for visual
+//          Only for visual for test bad connection
             delay(300L)
 
             networkExecutor<WeatherResponseDTO> {
-                execute { getWeatherUseCase(WeatherRequestDTO(city)) }
+                execute { getWeatherUseCase(city) }
                 success {
-                    viewState.value = ViewState.DataCollected(data = it)
+                    _state.value = ViewState.DataCollected(data = it)
                     saveActualCity(city)
                 }
-                error { viewState.value = ViewState.Error }
+                error {
+                    _state.value = ViewState.Error
+                    delay(1000L)
+                    processIntent(ViewIntent.Initial(loadCityUseCase()))
+                }
             }
         }
     }
@@ -74,9 +64,5 @@ class WeatherViewModel(
         viewModelScope.launch {
             saveCityUseCase(city)
         }
-    }
-
-    fun loadActualCity(): String {
-        return loadCityUseCase()
     }
 }
