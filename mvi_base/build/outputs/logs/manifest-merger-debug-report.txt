@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml:2:13-83
+INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml:2:13-83
+	package
+		INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml
+	xmlns:android
+		ADDED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml:2:23-81
+uses-sdk
+INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml reason: use-sdk injection requested
+INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml
+INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml
+	android:targetSdkVersion
+		INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml
+	android:minSdkVersion
+		INJECTED from /Users/andriiisaienko/AndroidStudioProjects/ComposeWeather/mvi_base/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest3574529225361149906.xml
