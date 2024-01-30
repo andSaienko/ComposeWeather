@@ -25,7 +25,7 @@ class HomeScreenViewModel(
     private val getWeatherUseCase: GetWeatherUseCase,
 ) : BaseViewModel<ViewIntent, ViewState>, ViewModel() {
 
-    private val _state = MutableStateFlow<ViewState>(ViewState.Loading)
+    private val _state = MutableStateFlow<ViewState>(ViewState.RoutingState.Loading)
     override val state: StateFlow<ViewState> = _state
 
     init {
@@ -52,7 +52,7 @@ class HomeScreenViewModel(
                     saveActualCity(city)
                 }
                 error {
-                    _state.value = ViewState.Error
+                    _state.value = ViewState.RoutingState.Error
                     delay(1000L)
                     processIntent(ViewIntent.Initial(loadCityUseCase()))
                 }

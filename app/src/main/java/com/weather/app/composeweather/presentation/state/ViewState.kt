@@ -4,7 +4,9 @@ import com.weather.app.composeweather.domain.model.WeatherResponseDTO
 import com.weather.mvi_base.BaseState
 
 sealed class ViewState : BaseState {
-    data object Loading : ViewState()
+    sealed class RoutingState : ViewState() {
+        object Loading : RoutingState()
+        object Error : RoutingState()
+    }
     data class DataCollected(val data: WeatherResponseDTO) : ViewState()
-    data object Error : ViewState()
 }

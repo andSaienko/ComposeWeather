@@ -1,6 +1,8 @@
 package com.weather.app.composeweather.data.model.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 
 data class ForecastDTO(
@@ -18,11 +20,12 @@ data class AstroDTO(
     @SerializedName("is_sun_up") val isSunUp: Int? = null,
 )
 
+@Parcelize
 data class ConditionDTO(
     val text: String? = null,
     val icon: String? = null,
     val code: Int? = null,
-)
+) : Parcelable
 
 data class CurrentWeatherDTO(
     @SerializedName("last_updated_epoch") val lastUpdatedEpoch: Int? = null,
@@ -81,6 +84,7 @@ data class ForecastDayDTO(
     val hour: ArrayList<HourDTO> = arrayListOf(),
 )
 
+@Parcelize
 data class HourDTO(
     @SerializedName("time_epoch") val timeEpoch: Int? = null,
     @SerializedName("time") val time: String? = null,
@@ -115,7 +119,7 @@ data class HourDTO(
     @SerializedName("gust_mph") val gustMph: Double? = null,
     @SerializedName("gust_kph") val gustKph: Double? = null,
     @SerializedName("uv") val uv: Int? = null,
-)
+) : Parcelable
 
 data class LocationDTO(
     val name: String? = null,

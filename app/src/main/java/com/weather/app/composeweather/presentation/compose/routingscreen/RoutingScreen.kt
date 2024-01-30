@@ -17,7 +17,7 @@ import com.weather.app.composeweather.R
 import com.weather.app.composeweather.presentation.state.ViewState
 
 @Composable
-fun RoutingTheme(state: ViewState) {
+fun RoutingWidget(state: ViewState) {
 
     Column(
         modifier = Modifier
@@ -27,7 +27,7 @@ fun RoutingTheme(state: ViewState) {
         verticalArrangement = Arrangement.Center
     ) {
         when (state) {
-            is ViewState.Loading -> {
+            is ViewState.RoutingState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier
                         .size(120.dp),
@@ -35,7 +35,7 @@ fun RoutingTheme(state: ViewState) {
                 )
             }
 
-            is ViewState.Error -> {
+            is ViewState.RoutingState.Error -> {
                 Image(
                     modifier = Modifier
                         .size(120.dp),
