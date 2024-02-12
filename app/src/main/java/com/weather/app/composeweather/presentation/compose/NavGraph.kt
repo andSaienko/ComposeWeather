@@ -26,8 +26,8 @@ fun ComposeWeatherNavHost(
 ) {
     NavHost(navController = navController,
         startDestination = Screen.Home.route,
-        enterTransition = { fadeIn(animationSpec = tween(350)) },
-        exitTransition = { fadeOut(animationSpec = tween(350)) }) {
+        enterTransition = { fadeIn(animationSpec = tween(ANIMATION_TIME)) },
+        exitTransition = { fadeOut(animationSpec = tween(ANIMATION_TIME)) }) {
         composable(route = Screen.Home.route) {
             HomeScreen( navController = navController)
         }
@@ -39,3 +39,5 @@ fun ComposeWeatherNavHost(
         }
     }
 }
+
+private const val ANIMATION_TIME = 350
