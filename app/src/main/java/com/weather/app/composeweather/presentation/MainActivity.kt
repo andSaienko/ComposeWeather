@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.weather.app.composeweather.presentation.compose.ComposeWeatherApp
+import com.weather.app.composeweather.presentation.ui.ComposeWeatherApp
 import com.weather.core.ui.theme.ComposeWeatherTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.compose
+package com.weather.app.composeweather.presentation.ui
 
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType

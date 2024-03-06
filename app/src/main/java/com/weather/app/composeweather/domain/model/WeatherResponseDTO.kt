@@ -6,7 +6,7 @@ import com.weather.app.composeweather.data.model.response.ForecastDTO
 import com.weather.app.composeweather.data.model.response.LocationDTO
 
 data class WeatherResponseDTO(
-    val location: LocationDTO? = LocationDTO(),
-    val current: CurrentWeatherDTO? = CurrentWeatherDTO(),
-    val forecast: ForecastDTO? = ForecastDTO(),
+    val location: LocationDTO,
+    val current: CurrentWeatherDTO,
+    val forecast: ForecastDTO,
 )

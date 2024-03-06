@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.compose.homescreen
+package com.weather.app.composeweather.presentation.ui.homescreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,17 +47,17 @@ fun WeatherHourListItem(
                 modifier = Modifier.fillMaxWidth(0.45f)
             ) {
                 Text(
-                    text = item.time.toString(), color = Color(0x80000000), fontSize = 14.sp
+                    text = item.time, color = Color(0x80000000), fontSize = 14.sp
                 )
                 Text(
-                    text = item.condition?.text.toString(), color = Color(0x80000000), fontSize = 14.sp
+                    text = item.condition.text, color = Color(0x80000000), fontSize = 14.sp
                 )
             }
             Text(
-                modifier = Modifier.weight(1f), text = "${item.tempC?.let { floor(it).toInt() }}ºС", color = Color(0x80000000), fontSize = 24.sp
+                modifier = Modifier.weight(1f), text = "${floor(item.tempC).toInt()}ºС", color = Color(0x80000000), fontSize = 24.sp
             )
             AsyncImage(
-                modifier = Modifier.size(24.dp), model = "https:${item.condition?.icon}", contentDescription = "weather icon"
+                modifier = Modifier.size(24.dp), model = "https:${item.condition.icon}", contentDescription = "weather icon"
             )
         }
     }

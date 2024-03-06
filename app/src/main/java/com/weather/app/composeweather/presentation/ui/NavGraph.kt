@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.compose
+package com.weather.app.composeweather.presentation.ui
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -8,9 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.weather.app.composeweather.presentation.compose.daydetails.DayDetailsScreen
-import com.weather.app.composeweather.presentation.compose.homescreen.HomeScreen
-import com.weather.app.composeweather.presentation.compose.hourdetails.HourDetailsScreen
+import com.weather.app.composeweather.presentation.ui.daydetails.DayDetailsScreen
+import com.weather.app.composeweather.presentation.ui.homescreen.HomeScreen
+import com.weather.app.composeweather.presentation.ui.hourdetails.HourDetailsScreen
 
 @Composable
 fun ComposeWeatherApp() {

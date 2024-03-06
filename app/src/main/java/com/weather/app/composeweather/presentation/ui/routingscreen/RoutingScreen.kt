@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.compose.routingscreen
+package com.weather.app.composeweather.presentation.ui.routingscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

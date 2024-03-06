@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.compose.daydetails
+package com.weather.app.composeweather.presentation.ui.hourdetails
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,30 +15,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.weather.app.composeweather.presentation.viewmodel.DayScreenViewModel
 import com.weather.core.ui.theme.LightBlue
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun DayDetailsScreen(
-    onBackClick: () -> Unit
+fun HourDetailsScreen(
+    viewModel: DayScreenViewModel = getViewModel(), onBackClick: () -> Unit
 ) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LightBlue)
-            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = statusBarHeight)
+            .background(color = LightBlue)
+            .padding(bottom = 8.dp, start = 8.dp, end = 8.dp, top = statusBarHeight)
     ) {
         Card(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 4.dp),
+            modifier = Modifier.fillMaxSize(),
             colors = CardDefaults.cardColors(Color(0x80F1FEFF)),
             elevation = CardDefaults.cardElevation(0.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
-            Column {
-            }
+            Column(modifier = Modifier.padding(8.dp)) {}
         }
     }
 }

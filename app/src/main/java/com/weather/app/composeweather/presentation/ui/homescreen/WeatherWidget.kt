@@ -1,4 +1,4 @@
-package com.weather.app.composeweather.presentation.compose.homescreen
+package com.weather.app.composeweather.presentation.ui.homescreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,9 +54,9 @@ import com.google.accompanist.pager.rememberPagerState
 import com.weather.app.composeweather.R
 import com.weather.app.composeweather.data.model.response.HourDTO
 import com.weather.app.composeweather.domain.model.WeatherResponseDTO
-import com.weather.app.composeweather.presentation.compose.Screen
 import com.weather.app.composeweather.presentation.intent.ViewIntent
 import com.weather.app.composeweather.presentation.state.ViewState
+import com.weather.app.composeweather.presentation.ui.Screen
 import com.weather.app.composeweather.presentation.viewmodel.HomeScreenViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalTime
@@ -85,27 +85,27 @@ fun WeatherWidget(viewModel: HomeScreenViewModel, navController: NavController) 
                         .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = data.current?.lastUpdated.toString(),
+                        text = data.current.lastUpdated,
                         fontSize = 16.sp,
                         color = Color(0x80000000),
                     )
                     AsyncImage(
-                        modifier = Modifier.size(24.dp), model = "https://${data.current?.condition?.icon}", contentDescription = "weather icon"
+                        modifier = Modifier.size(24.dp), model = "https://${data.current.condition.icon}", contentDescription = "weather icon"
                     )
                 }
                 Column(
                     modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = data.location?.name ?: "unknown",
+                        text = data.location.name,
                         fontSize = 26.sp,
                         color = Color(0xC0000000),
                     )
                     Text(
-                        text = "${data.current?.tempC?.let { floor(it).toInt() }}ºC", fontSize = 48.sp, color = Color(0xC0000000)
+                        text = "${floor(data.current.tempC).toInt()}ºC", fontSize = 48.sp, color = Color(0xC0000000)
                     )
                     Text(
-                        text = data.current?.condition?.text.toString(), fontSize = 14.sp, color = Color(0x80000000)
+                        text = data.current.condition.text, fontSize = 14.sp, color = Color(0x80000000)
                     )
                 }
                 Row(
@@ -122,7 +122,7 @@ fun WeatherWidget(viewModel: HomeScreenViewModel, navController: NavController) 
                         )
                     }
                     Text(
-                        text = "Feels like ${data.current?.feelslikeC?.let { floor(it).toInt() }}ºС ", fontSize = 14.sp, color = Color(0x80000000)
+                        text = "Feels like ${floor(data.current.feelsLikeC).toInt()}ºС ", fontSize = 14.sp, color = Color(0x80000000)
                     )
                     IconButton(onClick = {
                         viewModel.viewModelScope.launch {
@@ -184,20 +184,18 @@ fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 when (index) {
                     0 -> {
-                        val hoursList = data.forecast?.forecastday?.get(index)?.hour
+                        val hoursList = data.forecast.forecastDay[index].hour
                         val currentHour = LocalTime.now().hour
-                        val futureHoursList = hoursList?.size?.let {
-                            hoursList.subList(
-                                currentHour + 1, it
-                            )
+                        val futureHoursList = hoursList.size.let {
+                            hoursList.subList(currentHour + 1, it)
                         }
-                        val independentList: ArrayList<HourDTO> = ArrayList(futureHoursList.orEmpty())
+                        val independentList: ArrayList<HourDTO> = ArrayList(futureHoursList)
 
                         itemsIndexed(independentList) { _, item ->
                             WeatherHourListItem(item = item, onHourItemClick = {
                                 navController.navigate(
                                     Screen.HourDetails.createRoute(
-                                        "kyiv", "22"
+                                        data.location.name, item.time
                                     )
                                 )
                             })
@@ -205,12 +203,11 @@ fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
                     }
 
                     1 -> {
-                        itemsIndexed(data.forecast?.forecastday ?: emptyList()) { _, item ->
+                        itemsIndexed(data.forecast.forecastDay) { _, item ->
                             WeatherDayListItem(item = item, onDayItemClick = {
                                 navController.navigate(
                                     Screen.DayDetails.createRoute(
-                                        //todo check this
-                                        "city"
+                                        data.location.name
                                     )
                                 )
                             })

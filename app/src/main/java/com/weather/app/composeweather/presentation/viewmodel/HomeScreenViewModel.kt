@@ -40,7 +40,7 @@ class HomeScreenViewModel(
         }
     }
 
-    fun getWeather(city: String) {
+    private fun getWeather(city: String) {
         viewModelScope.launch {
 //          Only for visual for test bad connection
             delay(300L)
