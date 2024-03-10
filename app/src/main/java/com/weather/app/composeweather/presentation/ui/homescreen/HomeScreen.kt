@@ -6,13 +6,13 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import com.weather.app.composeweather.presentation.ui.routingscreen.RoutingWidget
 import com.weather.app.composeweather.presentation.state.ViewState
-import com.weather.app.composeweather.presentation.viewmodel.HomeScreenViewModel
+import com.weather.app.composeweather.presentation.viewmodel.HomeViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: HomeScreenViewModel = getViewModel(),
+    viewModel: HomeViewModel = getViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
     LottieAnim()

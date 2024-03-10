@@ -15,10 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.weather.app.composeweather.data.model.response.HourDTO
+import com.weather.app.composeweather.R
+import com.weather.app.composeweather.data.model.HourDTO
 import kotlin.math.floor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +56,7 @@ fun WeatherHourListItem(
                 )
             }
             Text(
-                modifier = Modifier.weight(1f), text = "${floor(item.tempC).toInt()}ºС", color = Color(0x80000000), fontSize = 24.sp
+                modifier = Modifier.weight(1f), text = stringResource(R.string.temp_in_C, floor(item.tempC).toInt()), color = Color(0x80000000), fontSize = 24.sp
             )
             AsyncImage(
                 modifier = Modifier.size(24.dp), model = "https:${item.condition.icon}", contentDescription = "weather icon"

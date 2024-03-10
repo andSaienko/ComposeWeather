@@ -29,13 +29,13 @@ fun ComposeWeatherNavHost(
         enterTransition = { fadeIn(animationSpec = tween(ANIMATION_TIME)) },
         exitTransition = { fadeOut(animationSpec = tween(ANIMATION_TIME)) }) {
         composable(route = Screen.Home.route) {
-            HomeScreen( navController = navController)
+            HomeScreen(navController = navController)
         }
         composable(route = Screen.HourDetails.route) {
-            HourDetailsScreen(onBackClick = { navController.navigateUp() })
+            HourDetailsScreen(navController = navController)
         }
         composable(route = Screen.DayDetails.route) {
-            DayDetailsScreen(onBackClick = { navController.navigateUp() })
+            DayDetailsScreen()
         }
     }
 }

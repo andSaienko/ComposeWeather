@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,21 +19,18 @@ import androidx.compose.ui.unit.dp
 import com.weather.core.ui.theme.LightBlue
 
 @Composable
-fun DayDetailsScreen(
-    onBackClick: () -> Unit
-) {
+fun DayDetailsScreen() {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    val navBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(LightBlue)
-            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp, top = statusBarHeight)
+            .padding(start = 8.dp, end = 8.dp, bottom = navBarHeight + 8.dp, top = statusBarHeight)
     ) {
         Card(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 4.dp),
+            modifier = Modifier.fillMaxSize(),
             colors = CardDefaults.cardColors(Color(0x80F1FEFF)),
             elevation = CardDefaults.cardElevation(0.dp),
             shape = RoundedCornerShape(16.dp)

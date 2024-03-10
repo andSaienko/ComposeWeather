@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.weather.app.composeweather.R
 import com.weather.app.composeweather.presentation.state.ViewState
+import com.weather.core.ui.theme.LightBlue
 
 @Composable
 fun RoutingWidget(state: ViewState) {
@@ -22,7 +23,7 @@ fun RoutingWidget(state: ViewState) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF329BDC)),
+            .background(LightBlue),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

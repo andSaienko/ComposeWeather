@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
@@ -52,27 +53,30 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.weather.app.composeweather.R
-import com.weather.app.composeweather.data.model.response.HourDTO
+import com.weather.app.composeweather.data.model.HourDTO
 import com.weather.app.composeweather.domain.model.WeatherResponseDTO
 import com.weather.app.composeweather.presentation.intent.ViewIntent
 import com.weather.app.composeweather.presentation.state.ViewState
 import com.weather.app.composeweather.presentation.ui.Screen
-import com.weather.app.composeweather.presentation.viewmodel.HomeScreenViewModel
+import com.weather.app.composeweather.presentation.viewmodel.HomeViewModel
+import com.weather.core.ui.theme.LightBlue
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import kotlin.math.floor
 
 @Composable
-fun WeatherWidget(viewModel: HomeScreenViewModel, navController: NavController) {
+fun WeatherWidget(viewModel: HomeViewModel, navController: NavController) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     val state by viewModel.state.collectAsState()
     val data = (state as ViewState.DataCollected).data
     var isDialogVisible by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(top = statusBarHeight)) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
         Column(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = statusBarHeight)
         ) {
             Card(
                 colors = CardDefaults.cardColors(Color(0x80F1FEFF)),
@@ -102,7 +106,7 @@ fun WeatherWidget(viewModel: HomeScreenViewModel, navController: NavController) 
                         color = Color(0xC0000000),
                     )
                     Text(
-                        text = "${floor(data.current.tempC).toInt()}ºC", fontSize = 48.sp, color = Color(0xC0000000)
+                        text = stringResource(R.string.temp_in_C, floor(data.current.tempC).toInt()), fontSize = 48.sp, color = Color(0xC0000000)
                     )
                     Text(
                         text = data.current.condition.text, fontSize = 14.sp, color = Color(0x80000000)
@@ -122,7 +126,9 @@ fun WeatherWidget(viewModel: HomeScreenViewModel, navController: NavController) 
                         )
                     }
                     Text(
-                        text = "Feels like ${floor(data.current.feelsLikeC).toInt()}ºС ", fontSize = 14.sp, color = Color(0x80000000)
+                        text = stringResource(R.string.feels_like_in_C, floor(data.current.feelsLikeC).toInt()),
+                        fontSize = 14.sp,
+                        color = Color(0x80000000)
                     )
                     IconButton(onClick = {
                         viewModel.viewModelScope.launch {
@@ -193,11 +199,7 @@ fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
 
                         itemsIndexed(independentList) { _, item ->
                             WeatherHourListItem(item = item, onHourItemClick = {
-                                navController.navigate(
-                                    Screen.HourDetails.createRoute(
-                                        data.location.name, item.time
-                                    )
-                                )
+                                navController.navigate(Screen.HourDetails.createRoute(item.time))
                             })
                         }
                     }
@@ -205,11 +207,7 @@ fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
                     1 -> {
                         itemsIndexed(data.forecast.forecastDay) { _, item ->
                             WeatherDayListItem(item = item, onDayItemClick = {
-                                navController.navigate(
-                                    Screen.DayDetails.createRoute(
-                                        data.location.name
-                                    )
-                                )
+                                navController.navigate(Screen.DayDetails.createRoute(item.date))
                             })
                         }
                     }
@@ -228,7 +226,7 @@ fun LottieAnim() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF329BDC)),
+            .background(LightBlue),
     ) {
         LottieAnimation(composition = composition, progress = { progress })
     }
