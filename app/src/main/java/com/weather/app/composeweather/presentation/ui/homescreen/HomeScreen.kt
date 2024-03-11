@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.weather.app.composeweather.presentation.ui.routingscreen.RoutingWidget
 import com.weather.app.composeweather.presentation.state.ViewState
 import com.weather.app.composeweather.presentation.viewmodel.HomeViewModel
@@ -23,7 +24,7 @@ fun HomeScreen(
         }
 
         is ViewState.DataCollected -> {
-            WeatherWidget(viewModel = viewModel, navController = navController)
+            WeatherWidget(navController = navController)
         }
     }
 }

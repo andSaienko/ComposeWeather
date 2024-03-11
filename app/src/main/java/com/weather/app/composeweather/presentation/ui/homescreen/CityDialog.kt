@@ -74,7 +74,6 @@ fun InputCityDialog(
                 placeholder = { Text(text = "Input your city")}
             )
 
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

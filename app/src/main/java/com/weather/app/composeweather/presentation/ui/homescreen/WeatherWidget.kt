@@ -1,6 +1,9 @@
 package com.weather.app.composeweather.presentation.ui.homescreen
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -61,16 +67,23 @@ import com.weather.app.composeweather.presentation.ui.Screen
 import com.weather.app.composeweather.presentation.viewmodel.HomeViewModel
 import com.weather.core.ui.theme.LightBlue
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 import java.time.LocalTime
 import kotlin.math.floor
 
 @Composable
-fun WeatherWidget(viewModel: HomeViewModel, navController: NavController) {
+fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavController = rememberNavController()) {
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
 
     val state by viewModel.state.collectAsState()
     val data = (state as ViewState.DataCollected).data
     var isDialogVisible by remember { mutableStateOf(false) }
+
+    var rotationState by remember { mutableFloatStateOf(0f) }
+
+    val rotationAngle by animateFloatAsState(
+        targetValue = rotationState, animationSpec = tween(durationMillis = 500), label = ""
+    )
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -122,7 +135,11 @@ fun WeatherWidget(viewModel: HomeViewModel, navController: NavController) {
 
                     IconButton(onClick = { isDialogVisible = true }) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_search), contentDescription = "search button", tint = Color(0x80000000)
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "search button",
+                            tint = Color(0x80000000),
+                            modifier = Modifier
+                                .size(28.dp)
                         )
                     }
                     Text(
@@ -135,9 +152,15 @@ fun WeatherWidget(viewModel: HomeViewModel, navController: NavController) {
                             viewModel.processIntent(ViewIntent.RefreshIntent)
                         }
                     }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_refresh), contentDescription = "refresh button", tint = Color(0x80000000)
-                        )
+                        Icon(painter = painterResource(id = R.drawable.ic_refresh),
+                            contentDescription = "refresh button",
+                            tint = Color(0x80000000),
+                            modifier = Modifier
+                                .size(28.dp)
+                                .clickable {
+                                    rotationState += 360f
+                                }
+                                .rotate(rotationAngle))
                     }
 
                     if (isDialogVisible) {

@@ -1,29 +1,19 @@
 package com.weather.app.composeweather.presentation.ui
 
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-
 sealed class Screen(
-    val route: String, val navArgs: List<NamedNavArgument> = emptyList()
+    val route: String
 ) {
     data object Home : Screen("homeScreen")
 
     data object HourDetails : Screen(
-        route = "moreHourInfo/{hour}",
-        navArgs = listOf(navArgument("hourInfo") {
-            type = NavType.StringType
-        })
+        route = "moreHourInfo/{inputHour}",
     ) {
-        fun createRoute(currentHour: String) = "moreHourInfo/${currentHour}"
+        fun createRoute(hour: String) = "moreHourInfo/${hour}"
     }
 
     data object DayDetails : Screen(
-        route = "moreDayInfo/{day}",
-        navArgs = listOf(navArgument("dayInfo") {
-            type = NavType.StringType
-        })
+        route = "moreDayInfo/{inputDay}"
     ) {
-        fun createRoute(currentDay: String) = "moreDayInfo/${currentDay}"
+        fun createRoute(day: String) = "moreDayInfo/${day}"
     }
 }
