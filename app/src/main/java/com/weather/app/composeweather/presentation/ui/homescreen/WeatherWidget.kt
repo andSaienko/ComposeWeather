@@ -82,7 +82,9 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
     var rotationState by remember { mutableFloatStateOf(0f) }
 
     val rotationAngle by animateFloatAsState(
-        targetValue = rotationState, animationSpec = tween(durationMillis = 500), label = ""
+        targetValue = rotationState,
+        animationSpec = tween(durationMillis = 500),
+        label = ""
     )
 
     Column(
@@ -99,7 +101,8 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
                 Row(
                     modifier = Modifier
                         .padding(10.dp)
-                        .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
                         text = data.current.lastUpdated,
@@ -107,11 +110,14 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
                         color = Color(0x80000000),
                     )
                     AsyncImage(
-                        modifier = Modifier.size(24.dp), model = "https://${data.current.condition.icon}", contentDescription = "weather icon"
+                        modifier = Modifier.size(24.dp),
+                        model = "https://${data.current.condition.icon}",
+                        contentDescription = "weather icon"
                     )
                 }
                 Column(
-                    modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = data.location.name,
@@ -119,10 +125,14 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
                         color = Color(0xC0000000),
                     )
                     Text(
-                        text = stringResource(R.string.temp_in_C, floor(data.current.tempC).toInt()), fontSize = 48.sp, color = Color(0xC0000000)
+                        text = stringResource(R.string.temp_in_C, floor(data.current.tempC).toInt()),
+                        fontSize = 48.sp,
+                        color = Color(0xC0000000)
                     )
                     Text(
-                        text = data.current.condition.text, fontSize = 14.sp, color = Color(0x80000000)
+                        text = data.current.condition.text,
+                        fontSize = 14.sp,
+                        color = Color(0x80000000)
                     )
                 }
                 Row(
@@ -138,8 +148,7 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
                             painter = painterResource(id = R.drawable.ic_search),
                             contentDescription = "search button",
                             tint = Color(0x80000000),
-                            modifier = Modifier
-                                .size(28.dp)
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                     Text(
@@ -152,7 +161,8 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
                             viewModel.processIntent(ViewIntent.RefreshIntent)
                         }
                     }) {
-                        Icon(painter = painterResource(id = R.drawable.ic_refresh),
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_refresh),
                             contentDescription = "refresh button",
                             tint = Color(0x80000000),
                             modifier = Modifier
@@ -160,7 +170,8 @@ fun WeatherWidget(viewModel: HomeViewModel = getViewModel(), navController: NavC
                                 .clickable {
                                     rotationState += 360f
                                 }
-                                .rotate(rotationAngle))
+                                .rotate(rotationAngle)
+                        )
                     }
 
                     if (isDialogVisible) {
@@ -186,13 +197,21 @@ fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        TabRow(modifier = Modifier.clip(RoundedCornerShape(16.dp)), selectedTabIndex = tabIndex, indicator = { position ->
-            TabRowDefaults.Indicator(
-                modifier = Modifier
-                    .width(50.dp)
-                    .tabIndicatorOffset(position[tabIndex]), color = Color(0x80000000), height = 2.dp
-            )
-        }, containerColor = Color(0x80F1FEFF), divider = { Divider(color = Color.Transparent) }) {
+        TabRow(
+            modifier = Modifier.clip(RoundedCornerShape(16.dp)),
+            selectedTabIndex = tabIndex,
+            indicator = { position ->
+                TabRowDefaults.Indicator(
+                    modifier = Modifier
+                        .width(50.dp)
+                        .tabIndicatorOffset(position[tabIndex]),
+                    color = Color(0x80000000),
+                    height = 2.dp
+                )
+            },
+            containerColor = Color(0x80F1FEFF),
+            divider = { Divider(color = Color.Transparent) }
+        ) {
             tabList.forEachIndexed { index, title ->
                 Tab(selected = false, onClick = {
                     coroutineScope.launch {
@@ -200,7 +219,10 @@ fun HourDayTabLayout(data: WeatherResponseDTO, navController: NavController) {
                     }
                 }) {
                     Text(
-                        text = title, fontSize = 18.sp, modifier = Modifier.padding(8.dp), color = Color(0x80000000)
+                        text = title,
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(8.dp),
+                        color = Color(0x80000000)
                     )
                 }
             }

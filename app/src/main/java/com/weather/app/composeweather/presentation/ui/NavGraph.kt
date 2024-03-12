@@ -16,11 +16,11 @@ import com.weather.app.composeweather.presentation.ui.hourdetails.HourDetailsScr
 
 @Composable
 fun ComposeWeatherApp(navController: NavHostController = rememberNavController()) {
-    ComposeWeatherNavHost(navController = navController)
+    WeatherNavHost(navController = navController)
 }
 
 @Composable
-fun ComposeWeatherNavHost(
+fun WeatherNavHost(
     navController: NavHostController
 ) {
     NavHost(navController = navController,

@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.weather.app.composeweather.domain.model.DetailsInfo
 import com.weather.app.composeweather.presentation.state.ViewState
 import com.weather.app.composeweather.presentation.viewmodel.HomeViewModel
 import com.weather.core.ui.theme.LightBlue
@@ -34,21 +35,19 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HourDetailsScreen(
-    viewModel: HomeViewModel = getViewModel(), inputHour: String?
+    viewModel: HomeViewModel = getViewModel(),
+    inputHour: String?
 ) {
-    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-    val navBarHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
-
     val state by viewModel.state.collectAsState()
     val data = (state as ViewState.DataCollected).data
 
-    val hourDetailsDataList: MutableList<HourInfo> = mutableListOf()
+    val hourDetailsDataList: MutableList<DetailsInfo> = mutableListOf()
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = LightBlue)
-            .padding(bottom = navBarHeight + 8.dp, start = 8.dp, end = 8.dp, top = statusBarHeight),
+            .padding(all = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Card(
@@ -70,14 +69,14 @@ fun HourDetailsScreen(
                             model = "https://${hour.condition.icon}",
                             contentDescription = "weather icon"
                         )
-                        hourDetailsDataList.add(HourInfo(infoType = "Temperature", infoValue = "${hour.tempC} ºС"))
-                        hourDetailsDataList.add(HourInfo(infoType = "Wind speed", infoValue = "${hour.windKph} km/h"))
-                        hourDetailsDataList.add(HourInfo(infoType = "Wind degree", infoValue = hour.windDegree.toString()))
-                        hourDetailsDataList.add(HourInfo(infoType = "Pressure", infoValue = hour.pressureIn.toString()))
-                        hourDetailsDataList.add(HourInfo(infoType = "Humidity", infoValue = hour.humidity.toString()))
-                        hourDetailsDataList.add(HourInfo(infoType = "Cloud", infoValue = hour.cloud.toString()))
-                        hourDetailsDataList.add(HourInfo(infoType = "Feels like", infoValue = "${hour.feelsLikeC} ºС"))
-                        hourDetailsDataList.add(HourInfo(infoType = "Will it rain", infoValue = if (hour.willItRain == 0) "No" else "Yes"))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Temperature", infoValue = "${hour.tempC} ºС"))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Wind speed", infoValue = "${hour.windKph} km/h"))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Wind degree", infoValue = hour.windDegree.toString()))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Pressure", infoValue = hour.pressureIn.toString()))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Humidity", infoValue = hour.humidity.toString()))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Cloud", infoValue = hour.cloud.toString()))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Feels like", infoValue = "${hour.feelsLikeC} ºС"))
+                        hourDetailsDataList.add(DetailsInfo(infoType = "Will it rain", infoValue = if (hour.willItRain == 0) "No" else "Yes"))
                     }
                 }
                 Text(text = data.location.name, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xC0000000))
@@ -97,13 +96,16 @@ fun HourDetailsScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = hourDetailsDataList[index].infoType, modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                                    text = hourDetailsDataList[index].infoType,
+                                    modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+                                    color = Color(0x90000000)
                                 )
                                 Text(
                                     text = hourDetailsDataList[index].infoValue,
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.SemiBold,
-                                    modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
+                                    modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
+                                    color = Color(0x90000000)
                                 )
                             }
                         }
@@ -113,5 +115,3 @@ fun HourDetailsScreen(
         }
     }
 }
-
-private data class HourInfo(val infoType: String, val infoValue: String)
