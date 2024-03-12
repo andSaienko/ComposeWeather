@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.weather.core.ui.theme.LightBlue
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +52,7 @@ fun InputCityDialog(
                 .width(300.dp)
                 .padding(16.dp)
                 .clip(RoundedCornerShape(16.dp))
-            ) {
+        ) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = inputText,
@@ -71,7 +73,7 @@ fun InputCityDialog(
                     disabledContainerColor = Color.White,
                     focusedTextColor = Color.Black
                 ),
-                placeholder = { Text(text = "Input your city")}
+                placeholder = { Text(text = "Input your city") }
             )
 
             Row(
@@ -79,18 +81,23 @@ fun InputCityDialog(
                     .fillMaxWidth()
                     .background(Color.White), horizontalArrangement = Arrangement.End
             ) {
-                Button(modifier = Modifier.padding(vertical = 8.dp), onClick = {
-                    onConfirm(inputText.text)
-                    keyboardController?.hide()
-                }) {
-                    Text("OK")
+                Button(modifier = Modifier
+                    .padding(vertical = 8.dp),
+                    colors = ButtonDefaults.buttonColors(LightBlue),
+                    onClick = {
+                        onConfirm(inputText.text)
+                        keyboardController?.hide()
+                    }) {
+                    Text("OK", color = Color.White)
                 }
 
-                Button(modifier = Modifier.padding(8.dp), onClick = {
-                    onDismiss()
-                    keyboardController?.hide()
-                }) {
-                    Text("Cancel")
+                Button(modifier = Modifier.padding(8.dp),
+                    colors = ButtonDefaults.buttonColors(LightBlue),
+                    onClick = {
+                        onDismiss()
+                        keyboardController?.hide()
+                    }) {
+                    Text("Cancel", color = Color.White)
                 }
             }
         }
